@@ -1,23 +1,25 @@
 import { Injectable } from '@nestjs/common';
-import { CreateDailyReviewDto } from './dto/create-daily-review.dto';
-import { UpdateDailyReviewDto } from './dto/update-daily-review.dto';
-import { DailyReview } from './entities/daily-review.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { DailyReview } from './entities/daily-review.entity';
 
 @Injectable()
 export class DailyReviewService {
   constructor(
     @InjectRepository(DailyReview)
-    private readonly dailyReviewRepository: Repository<DailyReview>
-  ) { }
+    private readonly dailyReviewRepository: Repository<DailyReview>,
+  ) {}
 
   getDailyReviewList() {
-    // return this.dailyReviewRepository.find(); ← 紐付けない場合
-    return this.dailyReviewRepository.find({ relations: ["weeklyReview"] }); // ← 紐付ける場合
+    return this.dailyReviewRepository.find({ relations: ['weeklyReview'] });
   }
 
-  addDailyReview(sleepScore: number, walk: boolean, exercise: boolean, comment: string) {
+  addDailyReview(
+    sleepScore: number,
+    walk: boolean,
+    exercise: boolean,
+    comment: string,
+  ) {
     const dailyReview = new DailyReview();
     dailyReview.sleepScore = sleepScore;
     dailyReview.walk = walk;
@@ -27,9 +29,15 @@ export class DailyReviewService {
   }
 
   async updateDailyReview(
-    id: number, sleepScore: number, walk: boolean, exercise: boolean, comment: string
+    id: number,
+    sleepScore: number,
+    walk: boolean,
+    exercise: boolean,
+    comment: string,
   ) {
-    const daily_review = await this.dailyReviewRepository.findOne({ where: { id: id } });
+    const daily_review = await this.dailyReviewRepository.findOne({
+      where: { id: id },
+    });
     daily_review.sleepScore = sleepScore;
     daily_review.walk = walk;
     daily_review.exercise = exercise;

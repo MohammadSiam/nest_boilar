@@ -1,32 +1,45 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
-import { WeeklyReviewService } from './weekly-review.service';
+import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { CreateWeeklyReviewDto } from './dto/create-weekly-review.dto';
-import { UpdateWeeklyReviewDto } from './dto/update-weekly-review.dto';
+import { WeeklyReviewService } from './weekly-review.service';
 
 @Controller('weekly-review')
 export class WeeklyReviewController {
-  constructor(private readonly weeklyReviewService: WeeklyReviewService) { }
+  constructor(private readonly weeklyReviewService: WeeklyReviewService) {}
 
   @Get()
   getWeeklyReviewList() {
     return this.weeklyReviewService.getWeeklyReviewList();
   }
 
-  @Post()
-  addWeeklyReview(@Query() query: {
-    date: Date, sleepScoreAvg: number, walkCount: number, exerciseCount: number
-  }) {
+  @Post('create')
+  addWeeklyReview(@Body() createWeeklyReviewDto: CreateWeeklyReviewDto) {
+    const { date, sleepScoreAvg, walkCount, exerciseCount } =
+      createWeeklyReviewDto;
     return this.weeklyReviewService.addWeeklyReview(
-      query.date, query.sleepScoreAvg, query.walkCount, query.exerciseCount
+      new Date(date),
+      sleepScoreAvg,
+      walkCount,
+      exerciseCount,
     );
   }
 
   @Post('update')
-  updateWeeklyReview(@Query() query: {
-    id: number, date: Date, sleepScoreAvg: number, walkCount: number, exerciseCount: number
-  }) {
+  updateWeeklyReview(
+    @Query()
+    query: {
+      id: number;
+      date: Date;
+      sleepScoreAvg: number;
+      walkCount: number;
+      exerciseCount: number;
+    },
+  ) {
     return this.weeklyReviewService.updateWeeklyReview(
-      query.id, query.date, query.sleepScoreAvg, query.walkCount, query.exerciseCount
+      query.id,
+      query.date,
+      query.sleepScoreAvg,
+      query.walkCount,
+      query.exerciseCount,
     );
   }
 
@@ -36,23 +49,17 @@ export class WeeklyReviewController {
   }
 
   @Post('calculate/sleep-score-average')
-  calculateSleepScoreAvg(@Query() query: {
-    id: number
-  }) {
+  calculateSleepScoreAvg(@Query() query: { id: number }) {
     return this.weeklyReviewService.calculateSleepScoreAvg(query.id);
   }
 
   @Post('calculate/walk-count')
-  calculateWalkCount(@Query() query: {
-    id: number
-  }) {
+  calculateWalkCount(@Query() query: { id: number }) {
     return this.weeklyReviewService.calculateWalkCount(query.id);
   }
 
   @Post('calculate/exercise-count')
-  calculateExerciseCount(@Query() query: {
-    id: number
-  }) {
+  calculateExerciseCount(@Query() query: { id: number }) {
     return this.weeklyReviewService.calculateExerciseCount(query.id);
   }
 
