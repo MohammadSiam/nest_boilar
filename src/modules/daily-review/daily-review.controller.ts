@@ -4,7 +4,7 @@ import { CreateDailyReviewDto } from './dto/create-daily-review.dto';
 
 @Controller('daily-review')
 export class DailyReviewController {
-  constructor(private readonly dailyReviewService: DailyReviewService) {}
+  constructor(private readonly dailyReviewService: DailyReviewService) { }
 
   @Get()
   getDailyReviewList() {

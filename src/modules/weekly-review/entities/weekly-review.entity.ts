@@ -1,5 +1,5 @@
 import { DailyReview } from "src/modules/daily-review/entities/daily-review.entity";
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity('tblWeeklyReview')
 export class WeeklyReview {
