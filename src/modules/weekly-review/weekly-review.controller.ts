@@ -4,7 +4,7 @@ import { WeeklyReviewService } from './weekly-review.service';
 
 @Controller('weekly-review')
 export class WeeklyReviewController {
-  constructor(private readonly weeklyReviewService: WeeklyReviewService) {}
+  constructor(private readonly weeklyReviewService: WeeklyReviewService) { }
 
   @Get()
   getWeeklyReviewList() {
@@ -13,14 +13,7 @@ export class WeeklyReviewController {
 
   @Post('create')
   addWeeklyReview(@Body() createWeeklyReviewDto: CreateWeeklyReviewDto) {
-    const { date, sleepScoreAvg, walkCount, exerciseCount } =
-      createWeeklyReviewDto;
-    return this.weeklyReviewService.addWeeklyReview(
-      new Date(date),
-      sleepScoreAvg,
-      walkCount,
-      exerciseCount,
-    );
+    return this.weeklyReviewService.addWeeklyReview(createWeeklyReviewDto);
   }
 
   @Post('update')

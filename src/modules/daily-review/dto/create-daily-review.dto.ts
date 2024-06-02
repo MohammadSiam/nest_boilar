@@ -1,19 +1,22 @@
-import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsBoolean, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
 export class CreateDailyReviewDto {
   @IsNumber()
   @IsNotEmpty()
-  sleepScore: number;
+  readonly sleepScore: number;
+
+  @IsBoolean()
+  @IsNotEmpty()
+  readonly walk: boolean;
+
+  @IsBoolean()
+  @IsNotEmpty()
+  readonly exercise: boolean;
 
   @IsString()
   @IsNotEmpty()
-  walk: string;
+  readonly comment: string;
 
-  @IsString()
   @IsNotEmpty()
-  exercise: string;
-
-  @IsString()
-  @IsNotEmpty()
-  comment: string;
+  readonly weeklyReviewId: number;
 }

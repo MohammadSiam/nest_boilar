@@ -1,36 +1,35 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { WeeklyReview } from './entities/weekly-review.entity';
+import { CreateWeeklyReviewDto } from './dto/create-weekly-review.dto';
 
 @Injectable()
 export class WeeklyReviewService {
   constructor(
     @InjectRepository(WeeklyReview)
     private readonly weeklyRepository: Repository<WeeklyReview>,
-  ) {}
+  ) { }
   getWeeklyReviewList() {
     return this.weeklyRepository.find({
-      relations: ['dailyReviews'],
-      order: {
-        date: 'ASC',
-        id: 'DESC',
-      },
+      relations: ['dailyReviews']
     });
   }
 
+  async getWeeklyReviewById(id: number) {
+    try {
+      const weeklyReviewInfo = await this.weeklyRepository.findOneBy({ id });
+      if (!weeklyReviewInfo) throw new NotFoundException('Could not find weekly review')
+      return weeklyReviewInfo;
+    } catch (error) {
+      throw error;
+    }
+  }
+
   addWeeklyReview(
-    date: Date,
-    sleepScoreAvg: number,
-    walkCount: number,
-    exerciseCount: number,
+    CreateWeeklyReviewDto
   ) {
-    const weeklyReview = new WeeklyReview();
-    weeklyReview.date = date;
-    weeklyReview.sleepScoreAvg = sleepScoreAvg;
-    weeklyReview.walkCount = walkCount;
-    weeklyReview.exerciseCount = exerciseCount;
-    return this.weeklyRepository.insert(weeklyReview);
+    return this.weeklyRepository.save(CreateWeeklyReviewDto);
   }
 
   async updateWeeklyReview(

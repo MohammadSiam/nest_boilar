@@ -7,8 +7,8 @@ export class WeeklyReview {
     id: number;
 
     @Column({
-        type: 'date',
-        default: () => 'current_date'
+        type: 'datetime',
+        default: () => 'CURRENT_TIMESTAMP'
     })
     date: Date;
 
