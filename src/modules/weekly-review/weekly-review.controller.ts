@@ -1,6 +1,7 @@
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { CreateWeeklyReviewDto } from './dto/create-weekly-review.dto';
 import { WeeklyReviewService } from './weekly-review.service';
+import { UpdateWeeklyReviewDto } from './dto/update-weekly-review.dto';
 
 @Controller('weekly-review')
 export class WeeklyReviewController {
@@ -16,24 +17,9 @@ export class WeeklyReviewController {
     return this.weeklyReviewService.addWeeklyReview(createWeeklyReviewDto);
   }
 
-  @Post('update')
-  updateWeeklyReview(
-    @Query()
-    query: {
-      id: number;
-      date: Date;
-      sleepScoreAvg: number;
-      walkCount: number;
-      exerciseCount: number;
-    },
-  ) {
-    return this.weeklyReviewService.updateWeeklyReview(
-      query.id,
-      query.date,
-      query.sleepScoreAvg,
-      query.walkCount,
-      query.exerciseCount,
-    );
+  @Post('update/:id')
+  updateWeeklyReview(@Body() updateWeeklyReviewDto: UpdateWeeklyReviewDto, @Param('id') id: string) {
+    return this.weeklyReviewService.updateWeeklyReview(updateWeeklyReviewDto, +id);
   }
 
   @Post('delete')
@@ -42,8 +28,8 @@ export class WeeklyReviewController {
   }
 
   @Post('calculate/sleep-score-average')
-  calculateSleepScoreAvg(@Query() query: { id: number }) {
-    return this.weeklyReviewService.calculateSleepScoreAvg(query.id);
+  calculateSleepScoreAvg(@Param('id') id: string) {
+    return this.weeklyReviewService.calculateSleepScoreAvg(+id);
   }
 
   @Post('calculate/walk-count')

@@ -3,6 +3,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { WeeklyReview } from './entities/weekly-review.entity';
 import { CreateWeeklyReviewDto } from './dto/create-weekly-review.dto';
+import { UpdateDailyReviewDto } from '../daily-review/dto/update-daily-review.dto';
+import { UpdateWeeklyReviewDto } from './dto/update-weekly-review.dto';
 
 @Injectable()
 export class WeeklyReviewService {
@@ -32,21 +34,18 @@ export class WeeklyReviewService {
     return this.weeklyRepository.save(CreateWeeklyReviewDto);
   }
 
-  async updateWeeklyReview(
-    id: number,
-    date: Date,
-    sleepScoreAvg: number,
-    walkCount: number,
-    exerciseCount: number,
-  ) {
-    const weekly_review = await this.weeklyRepository.findOne({
-      where: { id: id },
+  async updateWeeklyReview(updateWeeklyReviewDto: UpdateWeeklyReviewDto, id: number) {
+    const weekly_review = await this.weeklyRepository.find({
+      where: { id },
     });
-    weekly_review.date = date;
-    weekly_review.sleepScoreAvg = sleepScoreAvg;
-    weekly_review.walkCount = walkCount;
-    weekly_review.exerciseCount = exerciseCount;
-    await this.weeklyRepository.save(weekly_review);
+    if (!weekly_review) throw new NotFoundException('No weekly review found');
+    try {
+      const weeklyReviewInfo = await this.weeklyRepository.save(updateWeeklyReviewDto);
+      if (!weeklyReviewInfo) throw new NotFoundException('No weekly review');
+      return weeklyReviewInfo;
+    } catch (error) {
+      throw error;
+    }
   }
 
   async calculateSleepScoreAvg(weeklyReviewId: number) {

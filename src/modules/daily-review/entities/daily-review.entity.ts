@@ -6,10 +6,7 @@ export class DailyReview {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({
-    type: 'date',
-    default: () => 'current_date',
-  })
+  @Column({ type: 'datetime', default: () => 'CURRENT_TIMESTAMP' })
   date: Date;
 
   @Column()
