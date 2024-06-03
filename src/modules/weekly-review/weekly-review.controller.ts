@@ -5,7 +5,7 @@ import { UpdateWeeklyReviewDto } from './dto/update-weekly-review.dto';
 
 @Controller('weekly-review')
 export class WeeklyReviewController {
-  constructor(private readonly weeklyReviewService: WeeklyReviewService) { }
+  constructor(private readonly weeklyReviewService: WeeklyReviewService) {}
 
   @Get()
   getWeeklyReviewList() {
@@ -18,8 +18,14 @@ export class WeeklyReviewController {
   }
 
   @Post('update/:id')
-  updateWeeklyReview(@Body() updateWeeklyReviewDto: UpdateWeeklyReviewDto, @Param('id') id: string) {
-    return this.weeklyReviewService.updateWeeklyReview(updateWeeklyReviewDto, +id);
+  updateWeeklyReview(
+    @Body() updateWeeklyReviewDto: UpdateWeeklyReviewDto,
+    @Param('id') id: string,
+  ) {
+    return this.weeklyReviewService.updateWeeklyReview(
+      updateWeeklyReviewDto,
+      +id,
+    );
   }
 
   @Post('delete')

@@ -7,11 +7,12 @@ import { DailyReviewModule } from './modules/daily-review/daily-review.module';
 import { WeeklyReviewModule } from './modules/weekly-review/weekly-review.module';
 
 @Module({
-  imports: [TypeOrmModule.forRoot(configService.getTypeOrmConfig()),
+  imports: [
+    TypeOrmModule.forRoot(configService.getTypeOrmConfig()),
     DailyReviewModule,
-    WeeklyReviewModule
+    WeeklyReviewModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule { }
+export class AppModule {}

@@ -3,15 +3,15 @@ import { CreateWeeklyReviewDto } from './create-weekly-review.dto';
 import { IsDateString, IsNotEmpty, IsNumber } from 'class-validator';
 
 export class UpdateWeeklyReviewDto extends PartialType(CreateWeeklyReviewDto) {
-    @IsNumber()
-    @IsNotEmpty()
-    sleepScoreAvg: number;
+  @IsNumber()
+  @IsNotEmpty()
+  sleepScoreAvg: number;
 
-    @IsNumber()
-    @IsNotEmpty()
-    walkCount: number;
+  @IsNumber()
+  @IsNotEmpty()
+  walkCount: number;
 
-    @IsNumber()
-    @IsNotEmpty()
-    exerciseCount: number;
+  @IsNumber()
+  @IsNotEmpty()
+  exerciseCount: number;
 }

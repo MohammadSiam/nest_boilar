@@ -11,7 +11,7 @@ export class DailyReviewController {
   constructor(
     private readonly dailyReviewService: DailyReviewService,
     private readonly weeklyReviewService: WeeklyReviewService,
-  ) { }
+  ) {}
 
   @Get()
   getDailyReviewList() {
@@ -22,14 +22,20 @@ export class DailyReviewController {
   async addDailyReview(@Body() createDailyReviewDto: CreateDailyReviewDto) {
     try {
       const weeklyReviewId = createDailyReviewDto.weeklyReviewId;
-      return this.dailyReviewService.addDailyReview(createDailyReviewDto, weeklyReviewId);
+      return this.dailyReviewService.addDailyReview(
+        createDailyReviewDto,
+        weeklyReviewId,
+      );
     } catch (error) {
       throw error;
     }
   }
 
   @Post('update/:id')
-  updateDailyReview(@Body() updateDailyReviewDto: UpdateDailyReviewDto, @Param('id') id: string) {
+  updateDailyReview(
+    @Body() updateDailyReviewDto: UpdateDailyReviewDto,
+    @Param('id') id: string,
+  ) {
     return this.dailyReviewService.updateDailyReview(updateDailyReviewDto, +id);
   }
 

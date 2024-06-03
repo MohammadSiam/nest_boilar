@@ -13,13 +13,16 @@ export class DailyReviewService {
     private readonly dailyReviewRepository: Repository<DailyReview>,
     @InjectRepository(WeeklyReview)
     private readonly weeklyReviewRepository: Repository<WeeklyReview>,
-  ) { }
+  ) {}
 
   getDailyReviewList() {
     return this.dailyReviewRepository.find({ relations: ['weeklyReview'] });
   }
 
-  async addDailyReview(createDailyReview: CreateDailyReviewDto, weeklyReviewId: number) {
+  async addDailyReview(
+    createDailyReview: CreateDailyReviewDto,
+    weeklyReviewId: number,
+  ) {
     try {
       const weeklyReview = await this.weeklyReviewRepository.findOne({
         where: { id: weeklyReviewId },
@@ -37,7 +40,10 @@ export class DailyReviewService {
 
       await this.dailyReviewRepository.save(dailyReviewInfo);
 
-      weeklyReview.dailyReviews = [...weeklyReview.dailyReviews, dailyReviewInfo]
+      weeklyReview.dailyReviews = [
+        ...weeklyReview.dailyReviews,
+        dailyReviewInfo,
+      ];
 
       await this.weeklyReviewRepository.save(weeklyReview);
 
@@ -48,20 +54,23 @@ export class DailyReviewService {
     }
   }
 
-
-  async updateDailyReview(updatedDailyReviewDto: UpdateDailyReviewDto, id: number) {
+  async updateDailyReview(
+    updatedDailyReviewDto: UpdateDailyReviewDto,
+    id: number,
+  ) {
     const daily_review = await this.dailyReviewRepository.find({
       where: { id },
     });
     if (!daily_review) throw new NotFoundException('No daily review found');
     try {
-      const dailyReviewInfo = await this.dailyReviewRepository.save(updatedDailyReviewDto);
+      const dailyReviewInfo = await this.dailyReviewRepository.save(
+        updatedDailyReviewDto,
+      );
       if (!dailyReviewInfo) throw new NotFoundException('No daily review');
       return dailyReviewInfo;
     } catch (error) {
       throw error;
     }
-
   }
 
   deleteDailyReview(id: number) {

@@ -9,6 +9,6 @@ import { DailyReview } from '../daily-review/entities/daily-review.entity';
   imports: [TypeOrmModule.forFeature([WeeklyReview, DailyReview])],
   controllers: [WeeklyReviewController],
   providers: [WeeklyReviewService],
-  exports: [WeeklyReviewService]
+  exports: [WeeklyReviewService],
 })
-export class WeeklyReviewModule { }
+export class WeeklyReviewModule {}

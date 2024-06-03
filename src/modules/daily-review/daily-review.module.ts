@@ -11,4 +11,4 @@ import { WeeklyReviewService } from '../weekly-review/weekly-review.service';
   controllers: [DailyReviewController],
   providers: [DailyReviewService, WeeklyReviewService],
 })
-export class DailyReviewModule { }
+export class DailyReviewModule {}
