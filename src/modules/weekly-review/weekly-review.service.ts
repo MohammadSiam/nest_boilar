@@ -11,7 +11,7 @@ export class WeeklyReviewService {
   constructor(
     @InjectRepository(WeeklyReview)
     private readonly weeklyRepository: Repository<WeeklyReview>,
-  ) {}
+  ) { }
   getWeeklyReviewList() {
     return this.weeklyRepository.find({
       relations: ['dailyReviews'],
@@ -20,7 +20,7 @@ export class WeeklyReviewService {
 
   async getWeeklyReviewById(id: number) {
     try {
-      const weeklyReviewInfo = await this.weeklyRepository.findOneBy({ id });
+      const weeklyReviewInfo = await this.weeklyRepository.find({ where: { id }, relations: ['dailyReviews'] });
       if (!weeklyReviewInfo)
         throw new NotFoundException('Could not find weekly review');
       return weeklyReviewInfo;

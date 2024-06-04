@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { DailyReview } from './entities/daily-review.entity';
@@ -13,31 +13,33 @@ export class DailyReviewService {
     private readonly dailyReviewRepository: Repository<DailyReview>,
     @InjectRepository(WeeklyReview)
     private readonly weeklyReviewRepository: Repository<WeeklyReview>,
-  ) {}
+  ) { }
 
   getDailyReviewList() {
     return this.dailyReviewRepository.find({ relations: ['weeklyReview'] });
   }
 
-  async addDailyReview(
-    createDailyReview: CreateDailyReviewDto,
-    weeklyReviewId: number,
-  ) {
+  async getDailyReviewById(id: number) {
     try {
+      const dailyReviewInfo = await this.dailyReviewRepository.find({ where: { intId: id }, relations: ['weeklyReview'] });
+      if (!dailyReviewInfo) throw new NotFoundException('No daily review found');
+      return dailyReviewInfo;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async addDailyReview(createDailyReview: CreateDailyReviewDto) {
+    if (!createDailyReview.comment || !createDailyReview.weeklyReviewId) throw new BadRequestException('Comment and weeklyReviewId are required');
+    try {
+      const weeklyReviewId = createDailyReview.weeklyReviewId;
       const weeklyReview = await this.weeklyReviewRepository.findOne({
         where: { id: weeklyReviewId },
         relations: ['dailyReviews'],
       });
-
       if (!weeklyReview) throw new NotFoundException('No weekly review found');
 
-      const dailyReviewInfo = this.dailyReviewRepository.create({
-        sleepScore: createDailyReview.sleepScore,
-        walk: createDailyReview.walk,
-        exercise: createDailyReview.exercise,
-        comment: createDailyReview.comment,
-      });
-
+      const dailyReviewInfo = this.dailyReviewRepository.create(createDailyReview);
       await this.dailyReviewRepository.save(dailyReviewInfo);
 
       weeklyReview.dailyReviews = [
@@ -59,7 +61,7 @@ export class DailyReviewService {
     id: number,
   ) {
     const daily_review = await this.dailyReviewRepository.find({
-      where: { id },
+      where: { intId: id },
     });
     if (!daily_review) throw new NotFoundException('No daily review found');
     try {
@@ -74,6 +76,6 @@ export class DailyReviewService {
   }
 
   deleteDailyReview(id: number) {
-    return this.dailyReviewRepository.delete({ id: id });
+    return this.dailyReviewRepository.delete({ intId: id });
   }
 }

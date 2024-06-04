@@ -11,21 +11,22 @@ export class DailyReviewController {
   constructor(
     private readonly dailyReviewService: DailyReviewService,
     private readonly weeklyReviewService: WeeklyReviewService,
-  ) {}
+  ) { }
 
   @Get()
   getDailyReviewList() {
     return this.dailyReviewService.getDailyReviewList();
   }
 
+  @Get(':id')
+  async getDailyReviewById(@Param('id') id: string) {
+    return this.dailyReviewService.getDailyReviewById(+id);
+  }
+
   @Post('create')
   async addDailyReview(@Body() createDailyReviewDto: CreateDailyReviewDto) {
     try {
-      const weeklyReviewId = createDailyReviewDto.weeklyReviewId;
-      return this.dailyReviewService.addDailyReview(
-        createDailyReviewDto,
-        weeklyReviewId,
-      );
+      return this.dailyReviewService.addDailyReview(createDailyReviewDto);
     } catch (error) {
       throw error;
     }

@@ -10,7 +10,7 @@ import {
 @Entity('tblDailyReviews')
 export class DailyReview {
   @PrimaryGeneratedColumn()
-  id: number;
+  intId: number;
 
   @Column({ type: 'datetime', default: () => 'CURRENT_TIMESTAMP' })
   date: Date;

@@ -5,11 +5,16 @@ import { UpdateWeeklyReviewDto } from './dto/update-weekly-review.dto';
 
 @Controller('weekly-review')
 export class WeeklyReviewController {
-  constructor(private readonly weeklyReviewService: WeeklyReviewService) {}
+  constructor(private readonly weeklyReviewService: WeeklyReviewService) { }
 
   @Get()
   getWeeklyReviewList() {
     return this.weeklyReviewService.getWeeklyReviewList();
+  }
+
+  @Get(':id')
+  async getWeeklyReviewById(@Param('id') id: string) {
+    return this.weeklyReviewService.getWeeklyReviewById(+id);
   }
 
   @Post('create')
